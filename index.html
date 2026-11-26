@@ -423,7 +423,7 @@ $("csv").onclick=()=>{if(!lastLoan)return toast("Calcula primero");
  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+s],{type:"text/csv"}));a.download="amortizacion.csv";a.click()};
 // formato en vivo y persistencia
 function upd(){document.querySelectorAll("[data-m]").forEach(d=>{const v=parseFloat($(d.dataset.m).value);d.textContent=isNaN(v)?"":"= "+money(v)})}
-document.addEventListener("input",e=>{if(e.target.dataset.k!==undefined){e.target.classList.remove("bad");upd();const s={};document.querySelectorAll("[data-k]").forEach(i=>s[i.id]=i.value);localStorage.setItem("fc_v",JSON.stringify(s))}});
+document.addEventListener("input",e=>{if(e.target.dataset.k!==undefined){e.target.classList.remove("bad");const output=e.target.closest(".p")?.querySelector(".out");if(output)output.innerHTML="";upd();const s={};document.querySelectorAll("[data-k]").forEach(i=>s[i.id]=i.value);localStorage.setItem("fc_v",JSON.stringify(s))}});
 try{const s=JSON.parse(localStorage.getItem("fc_v")||"{}");for(const k in s)if($(k))$(k).value=s[k]}catch(x){}
 $("cur").value=CUR;$("cur").onchange=()=>{CUR=$("cur").value;localStorage.setItem("fc_cur",CUR);upd()};
 function theme(l){document.documentElement.classList.toggle("light",l);$("theme").textContent=l?"🌙":"☀️";localStorage.setItem("fc_th",l?"l":"d")}
