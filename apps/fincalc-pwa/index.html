@@ -10,8 +10,8 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <style>
-:root{--bg:#0b1220;--card:#131c2e;--card2:#0e1626;--bd:#25324a;--tx:#e6edf7;--mu:#8a9bb8;--ac:#22c55e;--ac2:#16a34a;--acx:#04210f;--wa:#f59e0b;--er:#ef4444}
-:root.light{--bg:#f1f5f9;--card:#fff;--card2:#f1f5f9;--bd:#d6dee9;--tx:#0f172a;--mu:#64748b;--ac:#16a34a;--ac2:#15803d;--acx:#fff}
+:root{color-scheme:dark;--bg:#0b1220;--card:#131c2e;--card2:#0e1626;--bd:#25324a;--tx:#e6edf7;--mu:#8a9bb8;--ac:#22c55e;--ac2:#16a34a;--acx:#04210f;--wa:#f59e0b;--er:#ef4444}
+:root.light{color-scheme:light;--bg:#f1f5f9;--card:#fff;--card2:#f1f5f9;--bd:#d6dee9;--tx:#0f172a;--mu:#64748b;--ac:#16a34a;--ac2:#15803d;--acx:#fff}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:14px 14px 60px;transition:background .2s}
 .w{max-width:760px;margin:auto}
@@ -68,8 +68,35 @@ th{position:sticky;top:0;background:var(--card);color:var(--mu)}td:first-child,t
 .chart.fs .cv{flex:1;height:auto;min-height:0;touch-action:none}
 .tip{min-height:46px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;background:var(--card2);border:1px solid var(--bd);border-radius:10px;padding:6px 10px;margin-bottom:6px;font-size:12px;line-height:1.4}.tip .tx{flex:0 0 100%}.tip .tv{white-space:nowrap}
 .tip i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px}
+
+/* Savings redesign: scoped to the Ahorro panel. */
+#p5{padding:16px;--save-accent:#159447}
+#p5 h2{font-size:20px;margin-bottom:3px}
+#p5 .sub{margin-bottom:12px}
+#p5 .save-mode{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border:1px solid var(--bd);background:var(--card2);border-radius:12px;margin:12px 0}
+#p5 .save-mode button{border:0;border-radius:9px;background:transparent;color:var(--mu);padding:9px 12px;font-weight:650;font-size:14px;cursor:pointer}
+#p5 .save-mode button[aria-pressed="true"]{background:var(--ac);color:var(--acx)}
+#p5 .save-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+#p5 .save-field{min-width:0;padding:10px 11px 8px;border:1px solid var(--bd);border-radius:12px;background:var(--card2)}
+#p5 .save-field label{font-size:12px;font-weight:650;margin:0 0 5px;color:var(--mu)}
+#p5 .save-field input,#p5 .save-field select{padding:7px 2px 5px;border:0;border-radius:0;background:transparent;font-size:17px;font-weight:650;box-shadow:none}
+#p5 .save-field input:focus,#p5 .save-field select:focus{outline:2px solid var(--ac);outline-offset:2px;border-radius:5px}
+#p5 .save-field .fmt{font-size:11px;min-height:14px}
+#p5 .save-mode-note{font-size:12px;color:var(--mu);margin:6px 2px 11px;line-height:1.5}
+#p5 .save-advanced{margin:12px 0}
+#p5 .save-advanced summary{cursor:pointer;font-weight:700;color:var(--tx);padding:10px 0}
+#p5 .save-advanced .row{gap:8px}
+#p5 .save-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+#p5 .save-stat{padding:10px 11px;border:1px solid var(--bd);border-radius:11px;background:var(--card2);min-width:0}
+#p5 .save-stat span{display:block;color:var(--mu);font-size:11px;line-height:1.3}
+#p5 .save-stat b{display:block;margin-top:3px;font-size:15px;overflow-wrap:anywhere}
+#p5 .save-stat.primary{grid-column:1/-1;border-color:color-mix(in srgb,var(--ac) 55%,var(--bd))}
+#p5 .save-stat.primary b{font-size:21px;color:var(--ac)}
+#p5 .save-result-note{font-size:12px;color:var(--mu);line-height:1.45;margin:8px 2px}
+#p5 .savehint{font-size:12px}
+@media(max-width:420px){#p5{padding:13px}#p5 .save-fields{gap:7px}#p5 .save-field{padding:9px 8px 7px}#p5 .save-field input,#p5 .save-field select{font-size:16px}#p5 .save-summary{gap:6px}#p5 .save-stat{padding:9px}}
 </style></head><body><div class="w">
-<header><h1>💰 FinCalc<small>Calculadora financiera · v1.2.0</small></h1>
+<header><h1>💰 FinCalc<small>Calculadora financiera · v1.3.0</small></h1>
 <div class="tools"><select class="cur" id="cur"><option value="COP">COP $</option><option value="USD">USD $</option><option value="EUR">EUR €</option><option value="MXN">MXN $</option></select>
 <button class="ib" id="pdf" title="Guardar como PDF">📄</button><button class="ib" id="theme" title="Cambiar tema">🌙</button></div></header>
 <div class="tabs" id="tabs"></div>
@@ -113,17 +140,27 @@ th{position:sticky;top:0;background:var(--card);color:var(--mu)}td:first-child,t
 <div class="row"><div><label>Retención en la fuente (%)</label><input data-k id="dr" type="number" value="4" step="any"></div><div><label>Inflación anual esperada (%)</label><input data-k id="di" type="number" value="5" step="any"></div></div>
 <div class="btns"><button class="go" data-go="cdt">Calcular</button></div><div class="out" id="o4"></div></section>
 <!-- AHORRO -->
-<section class="p" id="p5"><h2>Ahorro e inversión</h2><p class="sub">Simulador de interés compuesto · proyección básica y flujos avanzados.</p>
-<div class="row"><div><label>Monto inicial</label><input data-k id="ai" type="number" value="1000000" min="0" inputmode="decimal"><div class="fmt" data-m="ai"></div></div><div><label>Aporte mensual inicial (opcional)</label><input data-k id="am" type="number" value="300000" min="0" inputmode="decimal"><div class="fmt" data-m="am"></div></div></div>
-<div class="row"><div><label>Tasa anual (%) · EA por defecto</label><input data-k id="ae" type="number" value="10" step="any" inputmode="decimal"></div><div><label>Plazo (años)</label><input data-k id="ay" type="number" value="10" min="0.1" max="100" step="any" inputmode="decimal"></div></div>
-<details id="advsettings"><summary style="cursor:pointer;font-weight:700;margin:14px 0 8px">Opciones avanzadas · tasa, capitalización e inflación</summary>
-<div class="row"><div><label>Tipo de tasa</label><select data-k id="arate"><option value="ea">Efectiva anual (EA)</option><option value="nom">Nominal anual, convertible según capitalización</option></select></div><div><label>Capitalización</label><select data-k id="acap"><option value="12">Mensual</option><option value="4">Trimestral</option><option value="daily">Diaria</option><option value="1">Anual</option></select></div></div>
-<div class="row"><div><label>Días por año (base de cálculo)</label><input data-k id="adays" type="number" value="365" min="1" max="366" step="1"></div><div><label>Inflación anual esperada (%)</label><input data-k id="af" type="number" value="5" step="any" inputmode="decimal"></div></div>
-<div class="row"><div><label>Meta final (opcional)</label><input data-k id="ag" type="number" min="0" placeholder="Ej: 100000000" inputmode="decimal"><div class="fmt" data-m="ag"></div></div><div><label>Aumento anual del aporte (%)</label><input data-k id="as" type="number" value="0" step="any" inputmode="decimal"></div></div>
-<div class="row"><div><label>Costos anuales estimados (%)</label><input data-k id="afee" type="number" value="0" min="0" max="100" step="any" inputmode="decimal"></div><div><label>Momento de aportes y flujos</label><select data-k id="atiming"><option value="end">Al final del mes (después del rendimiento)</option><option value="begin">Al inicio del mes (antes del rendimiento)</option></select></div></div>
-<div class="savehint">EA se convierte a la tasa equivalente de la frecuencia elegida; la nominal se divide por esa frecuencia. La simulación avanza en meses (1/12 de año); para capitalización diaria usa los días/año indicados. Los costos se descuentan como una tasa anual efectiva equivalente, prorrateada mensualmente. Para flujos dentro de un período de capitalización, el rendimiento se prorratea según la fracción del período (la simulación no modela fechas/calendarios diarios exactos). El momento elegido aplica a aportes y flujos programados. Saldo real = saldo final descontado por inflación. No incluye impuestos ni garantiza resultados.</div></details>
-<details id="advbox"><summary style="cursor:pointer;font-weight:700;margin:14px 0 8px">Flujos avanzados · depósitos y retiros programados</summary><p class="sub">Agrega flujos únicos o recurrentes. El mes 1 es el primer mes de la proyección; recurrencia anual = cada 12 meses. Los retiros porcentuales se calculan sobre el saldo disponible en ese momento.</p><div id="flowlist"></div><button type="button" class="sec" id="addflow">＋ Agregar depósito/retiro</button></details>
-<div class="btns"><button class="go" data-go="save">Proyectar ahorro</button><button class="sec" data-clr="p5">Limpiar</button></div><div class="out" id="o5"></div></section>
+<section class="p" id="p5"><h2>Ahorro e inversión</h2><p class="sub">Proyecta el crecimiento de tu ahorro y tus aportes.</p>
+<div class="save-mode" role="group" aria-label="Modo de proyección"><button type="button" id="saveBasic" aria-pressed="true">Básico</button><button type="button" id="saveAdvanced" aria-pressed="false">Avanzado</button></div>
+<p class="save-mode-note" id="saveModeNote" aria-live="polite"></p>
+<div class="save-fields">
+<div class="save-field"><label for="ai">Capital inicial</label><input data-k id="ai" type="number" value="1000000" min="0" step="any" inputmode="decimal"><div class="fmt" data-m="ai"></div></div>
+<div class="save-field"><label for="am">Aporte mensual</label><input data-k id="am" type="number" value="300000" min="0" step="any" inputmode="decimal"><div class="fmt" data-m="am"></div></div>
+<div class="save-field"><label for="ae">Tasa anual (%)</label><input data-k id="ae" type="number" value="10" step="any" inputmode="decimal"></div>
+<div class="save-field"><label for="saveRateType">Interpretación de la tasa</label><select data-k id="saveRateType"><option value="ea">Efectiva anual (EA)</option><option value="nom">Nominal anual, mes vencido</option></select></div>
+<div class="save-field"><label for="ay">Plazo (años)</label><input data-k id="ay" type="number" value="10" min="0.1" max="100" step="any" inputmode="decimal"></div>
+</div>
+<div id="advancedSave" hidden>
+<details id="advsettings" class="save-advanced"><summary>Más opciones avanzadas</summary>
+<p class="sub">Estas opciones solo afectan la proyección Avanzada. En Básico permanecen guardadas, pero no se aplican.</p>
+<div class="row"><div><label for="arate">Interpretación de la tasa (Avanzado)</label><select data-k id="arate"><option value="ea">Efectiva anual (EA)</option><option value="nom">Nominal anual, convertible según capitalización</option></select></div><div><label for="acap">Capitalización</label><select data-k id="acap"><option value="12">Mensual</option><option value="4">Trimestral</option><option value="daily">Diaria</option><option value="1">Anual</option></select></div></div>
+<div class="row"><div><label for="adays">Días por año (base de cálculo)</label><input data-k id="adays" type="number" value="365" min="1" max="366" step="1"></div><div><label for="af">Inflación anual esperada (%)</label><input data-k id="af" type="number" value="5" step="any" inputmode="decimal"></div></div>
+<div class="row"><div><label for="ag">Meta final (opcional)</label><input data-k id="ag" type="number" min="0" placeholder="Ej: 100000000" inputmode="decimal"><div class="fmt" data-m="ag"></div></div><div><label for="as">Aumento anual del aporte (%)</label><input data-k id="as" type="number" value="0" step="any" inputmode="decimal"></div></div>
+<div class="row"><div><label for="afee">Costos anuales estimados (%)</label><input data-k id="afee" type="number" value="0" min="0" max="100" step="any" inputmode="decimal"></div><div><label for="atiming">Momento de aportes y flujos</label><select data-k id="atiming"><option value="end">Al final del mes (después del rendimiento)</option><option value="begin">Al inicio del mes (antes del rendimiento)</option></select></div></div>
+<div class="savehint">EA es efectiva anual; nominal anual se divide según la frecuencia de capitalización (12% nominal mensual equivale a 12,6825% EA). La simulación avanza por meses; para capitalización diaria prorratea la tasa diaria a lo largo del año indicado. Los costos son una reducción anual efectiva estimada, prorrateada por mes. No modela fechas diarias exactas ni impuestos. El saldo real descuenta la inflación. Es una proyección, no una garantía.</div></details>
+<details id="advbox" class="save-advanced"><summary>Flujos adicionales · depósitos y retiros</summary><p class="sub">Mes 1 es el primer mes. La recurrencia anual es cada 12 meses. Los retiros porcentuales se calculan sobre el saldo existente en el momento elegido.</p><div id="flowlist"></div><button type="button" class="sec" id="addflow">＋ Agregar depósito/retiro</button></details>
+</div>
+<div class="btns"><button class="go" data-go="save">Proyectar ahorro</button><button class="sec" data-clr="p5">Restablecer valores</button></div><div class="out" id="o5" aria-live="polite"></div></section>
 <!-- VPN -->
 <section class="p" id="p6"><h2>VPN y TIR</h2><p class="sub">Evalúa un proyecto: ¿vale la pena la inversión?</p>
 <label>Tasa de descuento anual (%)</label><input data-k id="vr" type="number" value="10" step="any">
@@ -445,28 +482,48 @@ function renderFlows(){const root=$("flowlist");if(!root)return;root.innerHTML="
  saveFlows.forEach((f,i)=>{const row=document.createElement("div");row.className="flowrow";row.dataset.i=i;const valueLabel=f.kind==="pct"?"Porcentaje del saldo (%)":"Monto";
  row.innerHTML=`<div><label>Movimiento</label><select data-f="kind"><option value="dep" ${f.kind==="dep"?"selected":""}>Depósito</option><option value="wd" ${f.kind==="wd"?"selected":""}>Retiro fijo</option><option value="pct" ${f.kind==="pct"?"selected":""}>Retiro porcentual</option></select></div><div><label>${valueLabel}</label><input data-f="amount" type="number" min="0" step="any" value="${f.amount}"></div><div><label>Desde mes</label><input data-f="start" type="number" min="1" step="1" value="${f.start}"></div><div><label>Repetir</label><select data-f="every"><option value="0" ${f.every===0?"selected":""}>Una vez</option><option value="1" ${f.every===1?"selected":""}>Mensual</option><option value="3" ${f.every===3?"selected":""}>Trimestral</option><option value="12" ${f.every===12?"selected":""}>Anual</option></select></div><div ${f.every===0?'style="display:none"':''}><label>Hasta mes</label><input data-f="end" type="number" min="1" step="1" placeholder="Fin del plazo" value="${f.end}"></div><button type="button" class="sec del" data-del="${i}" aria-label="Eliminar flujo">×</button>`;root.appendChild(row)})}
 renderFlows();
-$("addflow").onclick=()=>{if(saveFlows.length>=20)return toast("Máximo 20 flujos programados");saveFlows.push({kind:"dep",amount:1000000,start:1,every:0,end:""});persistFlows();renderFlows()};
-$("flowlist").addEventListener("input",e=>{const el=e.target;if(!el.dataset.f)return;const i=+el.closest(".flowrow").dataset.i,key=el.dataset.f;saveFlows[i][key]=key==="end"&&el.value===""?"":(key==="kind"?el.value:(el.value===""?"":+el.value));persistFlows()});
-$("flowlist").addEventListener("change",e=>{const el=e.target;if(!el.dataset.f)return;const i=+el.closest(".flowrow").dataset.i,key=el.dataset.f;saveFlows[i][key]=key==="kind"?el.value:(el.value===""?"":+el.value);persistFlows();if(key==="kind"||key==="every")renderFlows()});
-$("flowlist").addEventListener("click",e=>{const b=e.target.closest("[data-del]");if(!b)return;saveFlows.splice(+b.dataset.del,1);persistFlows();renderFlows()});
+$("addflow").onclick=()=>{if(saveFlows.length>=20)return toast("Máximo 20 flujos programados");saveFlows.push({kind:"dep",amount:1000000,start:1,every:0,end:""});persistFlows();renderFlows();$("o5").innerHTML=""};
+$("flowlist").addEventListener("input",e=>{const el=e.target;if(!el.dataset.f)return;const i=+el.closest(".flowrow").dataset.i,key=el.dataset.f;saveFlows[i][key]=key==="end"&&el.value===""?"":(key==="kind"?el.value:(el.value===""?"":+el.value));persistFlows();$("o5").innerHTML=""});
+$("flowlist").addEventListener("change",e=>{const el=e.target;if(!el.dataset.f)return;const i=+el.closest(".flowrow").dataset.i,key=el.dataset.f;saveFlows[i][key]=key==="kind"?el.value:(el.value===""?"":+el.value);persistFlows();$("o5").innerHTML="";if(key==="kind"||key==="every")renderFlows()});
+$("flowlist").addEventListener("click",e=>{const b=e.target.closest("[data-del]");if(!b)return;saveFlows.splice(+b.dataset.del,1);persistFlows();renderFlows();$("o5").innerHTML=""});
+function persistInputs(){const saved={};document.querySelectorAll('[data-k]').forEach(el=>saved[el.id]=el.value);localStorage.setItem('fc_v',JSON.stringify(saved))}
+let SAVE_MODE=['basic','advanced'].includes(localStorage.getItem('fc_save_mode'))?localStorage.getItem('fc_save_mode'):'basic';
+function setSaveMode(mode,announce=true){SAVE_MODE=mode==='advanced'?'advanced':'basic';$('saveBasic').setAttribute('aria-pressed',SAVE_MODE==='basic');$('saveAdvanced').setAttribute('aria-pressed',SAVE_MODE==='advanced');$('advancedSave').hidden=SAVE_MODE!=='advanced';$('saveModeNote').textContent=SAVE_MODE==='basic'?'Básico usa capital inicial, aporte mensual, plazo y la tasa indicada. Los ajustes y flujos avanzados se conservan sin aplicarse.':'Avanzado activa capitalización, costos, inflación, aumento anual y flujos. La tasa se interpreta según las opciones de abajo.';localStorage.setItem('fc_save_mode',SAVE_MODE);if(announce){$('o5').innerHTML='';$('o5').dataset.text=''}}
+$('saveBasic').onclick=()=>setSaveMode('basic');$('saveAdvanced').onclick=()=>setSaveMode('advanced',true);setSaveMode(SAVE_MODE,false);
+function validateAndBuildSavings(){
+ const ids=['ai','am','ae','ay'];if(!need(ids))return{error:'Completa los campos requeridos.'};
+ const P=val('ai'),M=val('am'),rate=val('ae'),years=val('ay'),N=Math.round(years*12),annualType=SAVE_MODE==='advanced'?$('arate').value:$('saveRateType').value;
+ if(![P,M,rate,years].every(Number.isFinite)||P<0||M<0||years<=0||years>100||N<1||rate<=-100||rate>10000)return{error:'Revisa los rangos: capital/aporte no negativos, plazo mayor que 0 y hasta 100 años, y tasa mayor que −100%.'};
+ let freq=12,days=365,inf=0,step=0,fee=0,goal=null,begin=false,flows=[];
+ if(SAVE_MODE==='advanced'){
+  inf=val('af')??0;step=val('as')??0;fee=val('afee')??0;goal=val('ag');days=val('adays');const freqRaw=$('acap').value;freq=freqRaw==='daily'?days:+freqRaw;begin=$('atiming').value==='begin';
+  if(!Number.isInteger(days)||days<1||days>366||!Number.isFinite(freq)||freq<=0||!Number.isFinite(inf)||inf<=-100||inf>1000||!Number.isFinite(step)||step<=-100||step>1000||!Number.isFinite(fee)||fee<0||fee>100||(goal!==null&&(!Number.isFinite(goal)||goal<0)))return{error:'Revisa los rangos avanzados: inflación/aumento > −100%, costos 0–100%, días/año 1–366 y meta no negativa.'};
+  const f=annualType==='nom'?1+rate/100/freq:Math.pow(1+rate/100,1/freq);if(!(f>0)||!Number.isFinite(f))return{error:'La tasa y frecuencia producen una tasa periódica no válida.'};
+  const flowsCopy=saveFlows.map(x=>({...x}));
+  for(let j=0;j<flowsCopy.length;j++){const x=flowsCopy[j],amount=Number(x.amount),from=Number(x.start),to=x.end===''?N:Number(x.end),every=Number(x.every);if(x.amount===''||x.start===''||!Number.isFinite(amount)||amount<0||!Number.isInteger(from)||from<1||from>N||![0,1,3,12].includes(every)||(every!==0&&(!Number.isInteger(to)||to<from||to>N))||(x.kind==='pct'&&amount>100))return{error:`Revisa el flujo ${j+1}: monto no negativo, inicio dentro del plazo y recurrencia/fin válidos; retiro porcentual máximo 100%.`}}
+  flows=flowsCopy;
+ }
+ const periodFactor=annualType==='nom'?1+rate/100/freq:Math.pow(1+rate/100,1/freq);
+ const grossMonthly=Math.pow(periodFactor,freq/12),feeMonthly=SAVE_MODE==='advanced'?Math.pow(1-fee/100,1/12):1,monthlyFactor=grossMonthly*feeMonthly;
+ if(!Number.isFinite(monthlyFactor)||monthlyFactor<0||monthlyFactor>1e20)return{error:'La tasa produce una proyección fuera del rango numérico.'};
+ return{P,M,rate,years,N,annualType,freq,days,inf,step,fee,goal,begin,flows,periodFactor,monthlyFactor};
+}
 Object.assign(A,{save(){
- if(!need(["ai","ae","ay"]))return err("o5","Completa monto inicial, tasa y plazo.");
- const P=val("ai"),M=val("am")||0,rate=val("ae"),years=val("ay"),inf=val("af")??0,step=val("as")??0,fee=val("afee")??0,goal=val("ag"),days=val("adays"),freqRaw=$("acap").value,freq=freqRaw==="daily"?days:+freqRaw,nominal=$("arate").value==="nom",begin=$("atiming").value==="begin",N=Math.round(years*12);
- if(!Number.isFinite(P)||P<0||!Number.isFinite(M)||M<0||!Number.isFinite(rate)||!Number.isFinite(years)||years<=0||years>100||N<1||N>1200||!Number.isInteger(days)||days<1||days>366||!Number.isFinite(freq)||freq<=0||!Number.isFinite(inf)||inf<=-100||inf>1000||!Number.isFinite(step)||step<=-100||step>1000||!Number.isFinite(fee)||fee<0||fee>100||(goal!==null&&(!Number.isFinite(goal)||goal<0)))return err("o5","Revisa rangos: plazo 0–100 años; montos/meta no negativos; inflación > −100%; aumento anual > −100%; costos 0–100%; días/año entre 1 y 366.");
- const r=rate/100,periodFactor=nominal?1+r/freq:Math.pow(1+r,1/freq);if(!(periodFactor>0))return err("o5",nominal?"La tasa nominal debe ser mayor que −100% de la frecuencia de capitalización.":"La tasa efectiva anual debe ser mayor que −100%.");
- const monthlyGross=Math.pow(periodFactor,freq/12),feeMonthly=Math.pow(1-fee/100,1/12),monthlyFactor=monthlyGross*feeMonthly;if(!Number.isFinite(monthlyFactor)||monthlyFactor<0||monthlyFactor>1e20)return err("o5","La tasa produce una proyección fuera del rango numérico.");
- const flows=saveFlows.map(f=>({...f}));for(let j=0;j<flows.length;j++){const f=flows[j],v=Number(f.amount),st=Number(f.start),en=f.end===""?N:Number(f.end),ev=Number(f.every);if(f.amount===""||f.start===""||!Number.isFinite(v)||v<0||!Number.isInteger(st)||st<1||st>N||![0,1,3,12].includes(ev)||(ev!==0&&(!Number.isInteger(en)||en<st||en>N))||(f.kind==="pct"&&v>100))return err("o5",`Revisa el flujo ${j+1}: monto/porcentaje no negativo, desde mes 1–${N}, frecuencia válida y fin dentro del plazo; retiro porcentual máximo 100%.`)}
- const simulate=(monthlyDeposit)=>{let bal=P,added=P,withdrawn=0,shortfall=0,monthlyNow=monthlyDeposit,goalMonth=(goal!==null&&bal>=goal)?0:null;const balances=[bal],netContrib=[P];
-  const doFlows=month=>{for(const f of flows){const every=+f.every,last=every===0?+f.start:(f.end===""?N:+f.end);if(month<+f.start||month>last)continue;if(every!==0&&((month-+f.start)%every)!==0)continue;if(f.kind==="dep"){bal+=+f.amount;added+=+f.amount}else if(f.kind==="wd"){const req=+f.amount,actual=Math.min(bal,req);bal-=actual;withdrawn+=actual;shortfall+=req-actual}else{const amount=bal*(+f.amount/100);bal-=amount;withdrawn+=amount}}};
-  for(let month=1;month<=N;month++){if(month>1&&(month-1)%12===0)monthlyNow*=1+step/100;if(begin){bal+=monthlyNow;added+=monthlyNow;doFlows(month);bal*=monthlyFactor}else{bal*=monthlyFactor;bal+=monthlyNow;added+=monthlyNow;doFlows(month)}if(!Number.isFinite(bal)||bal<0||bal>1e300)return{error:true};if(goalMonth===null&&goal!==null&&bal>=goal)goalMonth=month;balances.push(bal);netContrib.push(added-withdrawn)}return{balances,netContrib,final:bal,added,withdrawn,shortfall,goalMonth}};
- const result=simulate(M);if(result.error)return err("o5","La proyección excede el rango numérico; reduce tasa, plazo o aportes.");const yearsSim=N/12,real=result.final/Math.pow(1+inf/100,yearsSim),grossEA=(Math.pow(periodFactor,freq)-1)*100,netEA=(Math.pow(monthlyFactor,12)-1)*100,gain=result.final+result.withdrawn-result.added,labels=Array.from({length:N+1},(_,k)=>k===0?"Hoy":k%12===0?`${k/12} a`:"");
- const capName=freqRaw==="daily"?`Diaria (${days} días/año)`:({"1":"Anual","4":"Trimestral","12":"Mensual"}[freqRaw]||`${freq} periodos/año`);
- let h=`<div class="res"><div class="bl">Saldo proyectado al mes ${N} (${num(yearsSim,1)} años)</div><div class="big">${money(result.final)}</div>`+kv("Capitalización",capName)+kv(`Tasa efectiva anual bruta equivalente (${nominal?"nominal":"EA"})`,pct(grossEA))+kv("Capital total aportado",money(result.added))+kv("Retiros realizados",money(result.withdrawn))+kv("Crecimiento neto estimado*",money(gain))+kv("Saldo en pesos de hoy",money(real))+kv("Rendimiento anual efectivo tras costos",pct(netEA))+`</div><div class="savehint">*Crecimiento neto = saldo final + retiros realizados − aportes totales. Retiros fijos que superan el saldo se limitan al saldo disponible y su faltante se informa; no se permite saldo negativo.</div>`+
- chart([result.balances,result.netContrib],["#22c55e","#60a5fa"],["Saldo proyectado","Aportes netos acumulados"],{xlabels:labels});
- let text=`Interés compuesto: saldo proyectado ${money(result.final)} en ${num(yearsSim,1)} años; aportes ${money(result.added)}, retiros realizados ${money(result.withdrawn)}, crecimiento neto ${money(gain)}, valor real ${money(real)}.`;
- if(goal!==null){h+=`<div class="saveflag"><b>🎯 Meta ${money(goal)}</b><br>`;if(result.goalMonth!==null){h+=result.goalMonth===0?"La meta ya se cumple con el monto inicial.":`Se alcanza por primera vez aproximadamente en ${yrs(result.goalMonth)}.`;text+=` Meta alcanzada por primera vez en ${yrs(result.goalMonth)}.`}else{h+=`No se alcanza dentro del plazo; al final faltan ${money(Math.max(0,goal-result.final))}.`;text+=" La meta no se alcanza dentro del plazo."}h+="</div>"}
- if(result.shortfall>0){h+=`<div class="saveflag warn"><b>⚠️ Retiros no cubiertos: ${money(result.shortfall)}</b><br>Los retiros fijos se limitaron al saldo disponible. Revisa el calendario o el monto inicial.</div>`;text+=` Retiros no cubiertos ${money(result.shortfall)}.`}
- show("o5",h,text)
+ const c=validateAndBuildSavings();if(c.error)return err('o5',c.error);
+ const {P,M,rate,years,N,annualType,freq,days,inf,step,fee,goal,begin,flows,periodFactor,monthlyFactor}=c;
+ const simulate=monthlyDeposit=>{let bal=P,contributed=P,deposits=0,withdrawn=0,shortfall=0,monthDeposit=monthlyDeposit,goalMonth=goal!==null&&P>=goal?0:null;const balances=[bal],netContrib=[P];
+  const scheduled=month=>{for(const f of flows){const every=+f.every,last=every===0?+f.start:(f.end===''?N:+f.end);if(month<+f.start||month>last||(every!==0&&(month-+f.start)%every!==0))continue;if(f.kind==='dep'){bal+=+f.amount;contributed+=+f.amount;deposits+=+f.amount}else if(f.kind==='wd'){const requested=+f.amount,paid=Math.min(bal,requested);bal-=paid;withdrawn+=paid;shortfall+=requested-paid}else{const amount=bal*(+f.amount/100);bal-=amount;withdrawn+=amount}}};
+  for(let month=1;month<=N;month++){if(month>1&&(month-1)%12===0)monthDeposit*=1+step/100;if(begin){bal+=monthDeposit;contributed+=monthDeposit;scheduled(month);bal*=monthlyFactor}else{bal*=monthlyFactor;bal+=monthDeposit;contributed+=monthDeposit;scheduled(month)}if(!Number.isFinite(bal)||bal<0||bal>1e300)return{error:true};if(goalMonth===null&&goal!==null&&bal>=goal)goalMonth=month;balances.push(bal);netContrib.push(contributed-withdrawn)}return{balances,netContrib,final:bal,contributed,deposits,withdrawn,shortfall,goalMonth}};
+ const r=simulate(M);if(r.error)return err('o5','La proyección excede el rango numérico; reduce la tasa, plazo o aportes.');
+ const real=SAVE_MODE==='advanced'?r.final/Math.pow(1+inf/100,N/12):null,grossEA=(Math.pow(periodFactor,freq)-1)*100,netEA=(Math.pow(monthlyFactor,12)-1)*100,interest=r.final+r.withdrawn-r.contributed,labels=Array.from({length:N+1},(_,i)=>i===0?'Hoy':i%12===0?`${i/12} a`:'');
+ const capName=SAVE_MODE==='basic'?'Mensual':freq===days&&$('acap').value==='daily'?`Diaria (${days} días/año)`:({'1':'Anual','4':'Trimestral','12':'Mensual'}[$('acap').value]||`${freq} periodos/año`);
+ let h=`<div class="save-summary"><div class="save-stat primary"><span>Saldo final · ${num(N/12,1)} años</span><b>${money(r.final)}</b></div><div class="save-stat"><span>Total invertido, incluido capital inicial</span><b>${money(r.contributed)}</b></div><div class="save-stat"><span>Depósitos realizados, sin capital inicial</span><b>${money(r.contributed-P)}</b></div><div class="save-stat"><span>Interés / crecimiento neto estimado</span><b>${money(interest)}</b></div><div class="save-stat"><span>EA equivalente ${annualType==='nom'?'(desde nominal)':'bruta'}</span><b>${pct(grossEA)}</b></div><div class="save-stat"><span>Frecuencia de capitalización</span><b>${capName}</b></div><div class="save-stat"><span>EA estimada después de costos${SAVE_MODE==='advanced'?'':' (sin costos)'} </span><b>${pct(netEA)}</b></div></div>`;
+ if(SAVE_MODE==='advanced')h+=`<div class="save-summary"><div class="save-stat"><span>Saldo en pesos de hoy</span><b>${money(real)}</b></div><div class="save-stat"><span>Retiros realizados</span><b>${money(r.withdrawn)}</b></div></div><p class="save-result-note">Interés/crecimiento neto = saldo final + retiros realizados − total invertido. Los costos estimados ya están descontados del saldo; EA después de costos aplica la reducción anual elegida. Los retiros fijos mayores al saldo disponible se limitan a ese saldo y se informa el faltante. Los retiros porcentuales se procesan en el orden de la lista.</p>`;
+ h+=chart([r.balances,r.netContrib],['#22c55e','#60a5fa'],['Saldo proyectado','Aportes netos acumulados'],{xlabels:labels});
+ let text=`Proyección ${SAVE_MODE==='advanced'?'avanzada':'básica'}: saldo final ${money(r.final)} en ${num(N/12,1)} años; invertido ${money(r.contributed)}, crecimiento neto estimado ${money(interest)}, EA equivalente ${pct(grossEA)}${SAVE_MODE==='advanced'?`, EA después de costos ${pct(netEA)}, valor real ${money(real)}`:''}.`;
+ if(goal!==null){h+=`<div class="saveflag"><b>Meta ${money(goal)}</b><br>`;if(r.goalMonth!==null){h+=r.goalMonth===0?'Ya se cumple con el capital inicial.':`Se alcanza aproximadamente en ${yrs(r.goalMonth)}.`;text+=` Meta alcanzada en ${yrs(r.goalMonth)}.`}else{h+=`No se alcanza dentro del plazo; al final faltan ${money(Math.max(0,goal-r.final))}.`;text+=' La meta no se alcanza en el plazo.'}h+='</div>'}
+ if(r.shortfall>0){h+=`<div class="saveflag warn"><b>Retiros fijos no cubiertos: ${money(r.shortfall)}</b><br>Los retiros se limitaron al saldo disponible.</div>`;text+=` Retiros no cubiertos: ${money(r.shortfall)}.`}
+ show('o5',h,text)
  }});
 
 // tabs
@@ -476,7 +533,7 @@ const st=localStorage.getItem("fc_tab");if(st)$("tabs").children[st].click();
 // acciones
 document.addEventListener("click",e=>{const t=e.target;
  if(t.dataset.go)A[t.dataset.go]();
- if(t.dataset.clr){const section=$(t.dataset.clr);section.querySelectorAll("input[data-k],select[data-k],textarea[data-k]").forEach(i=>{if(t.dataset.clr==="p5"){if(i.tagName==="SELECT")i.selectedIndex=0;else i.value=i.defaultValue}else if(i.id!=="py")i.value=""});if(t.dataset.clr==="p5"){saveFlows=[];persistFlows();renderFlows()}const output=section.querySelector(".out");if(output)output.innerHTML="";upd();const saved={};document.querySelectorAll("[data-k]").forEach(i=>saved[i.id]=i.value);localStorage.setItem("fc_v",JSON.stringify(saved))}
+ if(t.dataset.clr){const section=$(t.dataset.clr);if(t.dataset.clr==="p5"&&!window.confirm("Restablecer Ahorro y eliminar sus flujos guardados? Los demás cálculos no cambiarán."))return;section.querySelectorAll("input[data-k],select[data-k],textarea[data-k]").forEach(i=>{if(t.dataset.clr==="p5"){if(i.tagName==="SELECT")i.selectedIndex=0;else i.value=i.defaultValue}else if(i.id!=="py")i.value=""});if(t.dataset.clr==="p5"){saveFlows=[];persistFlows();renderFlows();setSaveMode("basic")}const output=section.querySelector(".out");if(output)output.innerHTML="";upd();if(t.dataset.clr==="p5")persistInputs();else{const saved={};document.querySelectorAll("[data-k]").forEach(i=>saved[i.id]=i.value);localStorage.setItem("fc_v",JSON.stringify(saved))}}
  if(t.dataset.copy){const x=$(t.dataset.copy).dataset.text;(navigator.clipboard?navigator.clipboard.writeText(x):Promise.reject()).then(()=>toast("Copiado ✅"),()=>toast("No se pudo copiar"))}});
 document.addEventListener("keydown",e=>{if(e.key=="Enter"&&e.target.tagName=="INPUT"){const b=e.target.closest(".p").querySelector("[data-go]");b&&b.click()}});
 $("csv").onclick=()=>{if(!lastLoan)return toast("Calcula primero");
@@ -484,7 +541,8 @@ $("csv").onclick=()=>{if(!lastLoan)return toast("Calcula primero");
  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+s],{type:"text/csv"}));a.download="amortizacion.csv";a.click()};
 // formato en vivo y persistencia
 function upd(){document.querySelectorAll("[data-m]").forEach(d=>{const v=parseFloat($(d.dataset.m).value);d.textContent=isNaN(v)?"":"= "+money(v)})}
-document.addEventListener("input",e=>{if(e.target.dataset.k!==undefined){e.target.classList.remove("bad");const output=e.target.closest(".p")?.querySelector(".out");if(output)output.innerHTML="";upd();const s={};document.querySelectorAll("[data-k]").forEach(i=>s[i.id]=i.value);localStorage.setItem("fc_v",JSON.stringify(s))}});
+document.addEventListener("input",e=>{if(e.target.dataset.k!==undefined){e.target.classList.remove("bad");const output=e.target.closest(".p")?.querySelector(".out");if(output)output.innerHTML="";upd();persistInputs()}});
+document.addEventListener("change",e=>{if(e.target.dataset.k!==undefined){const output=e.target.closest(".p")?.querySelector(".out");if(output)output.innerHTML="";persistInputs()}});
 try{const s=JSON.parse(localStorage.getItem("fc_v")||"{}");for(const k in s)if($(k))$(k).value=s[k]}catch(x){}
 $("cur").value=CUR;$("cur").onchange=()=>{CUR=$("cur").value;localStorage.setItem("fc_cur",CUR);upd()};
 function theme(l){document.documentElement.classList.toggle("light",l);$("theme").textContent=l?"🌙":"☀️";localStorage.setItem("fc_th",l?"l":"d")}
