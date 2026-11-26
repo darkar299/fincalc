@@ -55,6 +55,7 @@ th{position:sticky;top:0;background:var(--card);color:var(--mu)}td:first-child,t
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;transition:.3s;pointer-events:none}
 .toast.s{transform:translateX(-50%) translateY(0)}
 .foot{text-align:center;color:var(--mu);font-size:12px;margin-top:16px}
+.savehint{margin-top:10px;padding:10px 12px;border-radius:11px;background:var(--card2);border:1px solid var(--bd);color:var(--mu);font-size:12px;line-height:1.5}.savegroup{margin-top:10px}.savegroup h3{font-size:14px;margin:0 0 6px;color:var(--mu)}.saveflag{padding:10px 12px;margin-top:10px;border:1px solid var(--bd);border-radius:12px;background:var(--card2);line-height:1.5;font-size:14px}.saveflag b{color:var(--ac)}
 @media print{.tip{display:none!important}.chart .tb{display:none!important}body{background:#fff;color:#000}header .tools,.tabs,.btns,.foot,.toast,.p:not(.a) .out,label,input,select,textarea,.sub{display:none!important}.p{border:0;display:none}.p.a{display:block}.res,.chart{border-color:#999;background:#fff}.big{color:#000}.sc{max-height:none;overflow:visible}:root{--tx:#000;--mu:#444;--card:#fff;--card2:#fff;--bd:#999}}
 
 .chart{position:relative}.chart .tb{display:flex;gap:6px;align-items:center;margin-bottom:6px}
@@ -67,7 +68,7 @@ th{position:sticky;top:0;background:var(--card);color:var(--mu)}td:first-child,t
 .tip{min-height:46px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;background:var(--card2);border:1px solid var(--bd);border-radius:10px;padding:6px 10px;margin-bottom:6px;font-size:12px;line-height:1.4}.tip .tx{flex:0 0 100%}.tip .tv{white-space:nowrap}
 .tip i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px}
 </style></head><body><div class="w">
-<header><h1>💰 FinCalc<small>Calculadora financiera · v1.0.0</small></h1>
+<header><h1>💰 FinCalc<small>Calculadora financiera · v1.1.0</small></h1>
 <div class="tools"><select class="cur" id="cur"><option value="COP">COP $</option><option value="USD">USD $</option><option value="EUR">EUR €</option><option value="MXN">MXN $</option></select>
 <button class="ib" id="pdf" title="Guardar como PDF">📄</button><button class="ib" id="theme" title="Cambiar tema">🌙</button></div></header>
 <div class="tabs" id="tabs"></div>
@@ -111,11 +112,14 @@ th{position:sticky;top:0;background:var(--card);color:var(--mu)}td:first-child,t
 <div class="row"><div><label>Retención en la fuente (%)</label><input data-k id="dr" type="number" value="4" step="any"></div><div><label>Inflación anual esperada (%)</label><input data-k id="di" type="number" value="5" step="any"></div></div>
 <div class="btns"><button class="go" data-go="cdt">Calcular</button></div><div class="out" id="o4"></div></section>
 <!-- AHORRO -->
-<section class="p" id="p5"><h2>Ahorro e inversión</h2><p class="sub">Proyección con aportes mensuales, efecto de la inflación y meta.</p>
-<div class="row"><div><label>Monto inicial</label><input data-k id="ai" type="number" value="1000000"><div class="fmt" data-m="ai"></div></div><div><label>Aporte mensual</label><input data-k id="am" type="number" value="300000"><div class="fmt" data-m="am"></div></div></div>
-<div class="row"><div><label>Rendimiento EA (%)</label><input data-k id="ae" type="number" value="10" step="any"></div><div><label>Años</label><input data-k id="ay" type="number" value="10" step="any"></div></div>
-<div class="row"><div><label>Inflación anual (%)</label><input data-k id="af" type="number" value="5" step="any"></div><div><label>Meta (opcional)</label><input data-k id="ag" type="number" placeholder="Ej: 100000000"><div class="fmt" data-m="ag"></div></div></div>
-<div class="btns"><button class="go" data-go="save">Proyectar</button></div><div class="out" id="o5"></div></section>
+<section class="p" id="p5"><h2>Ahorro e inversión</h2><p class="sub">Proyección mensual con costos, aumento anual del aporte, inflación y meta.</p>
+<div class="row"><div><label>Monto inicial</label><input data-k id="ai" type="number" value="1000000" min="0" inputmode="decimal"><div class="fmt" data-m="ai"></div></div><div><label>Aporte mensual inicial</label><input data-k id="am" type="number" value="300000" min="0" inputmode="decimal"><div class="fmt" data-m="am"></div></div></div>
+<div class="row"><div><label>Rendimiento bruto EA (%)</label><input data-k id="ae" type="number" value="10" step="any" inputmode="decimal"></div><div><label>Plazo (años)</label><input data-k id="ay" type="number" value="10" min="0.1" max="100" step="any" inputmode="decimal"></div></div>
+<div class="row"><div><label>Inflación anual esperada (%)</label><input data-k id="af" type="number" value="5" step="any" inputmode="decimal"></div><div><label>Meta final (opcional)</label><input data-k id="ag" type="number" min="0" placeholder="Ej: 100000000" inputmode="decimal"><div class="fmt" data-m="ag"></div></div></div>
+<div class="row"><div><label>Aumento anual del aporte (%)</label><input data-k id="as" type="number" value="0" step="any" inputmode="decimal"></div><div><label>Costos anuales estimados (%)</label><input data-k id="afee" type="number" value="0" min="0" max="100" step="any" inputmode="decimal"></div></div>
+<label>Momento del aporte mensual</label><select data-k id="atiming"><option value="end">Al final de cada mes</option><option value="begin">Al inicio de cada mes</option></select>
+<div class="savehint">El aumento del aporte se aplica una vez al año. Los costos son un porcentaje anual del saldo (no del aporte); el saldo real muestra su valor aproximado en pesos de hoy. No se incluyen impuestos y las proyecciones no garantizan resultados.</div>
+<div class="btns"><button class="go" data-go="save">Proyectar ahorro</button><button class="sec" data-clr="p5">Limpiar</button></div><div class="out" id="o5"></div></section>
 <!-- VPN -->
 <section class="p" id="p6"><h2>VPN y TIR</h2><p class="sub">Evalúa un proyecto: ¿vale la pena la inversión?</p>
 <label>Tasa de descuento anual (%)</label><input data-k id="vr" type="number" value="10" step="any">
@@ -384,18 +388,38 @@ cdt(){
  `<div class="kv"><span>Rentabilidad real (vs inflación)</span><b class="${c.real>=0?"ok":"warn"}">${pct(c.real)}</b></div></div>`+chart([gross,net,real],["#f59e0b","#22c55e","#60a5fa"],["Saldo bruto","Saldo neto","Valor real descontando inflación"],{xlabels:labels})+(c.real<0?`<p class="warn">⚠️ La inflación se come el rendimiento: pierdes poder adquisitivo.</p>`:""),
  `CDT ${money(val("dc"))}: recibes ${money(c.final)}, EA neta ${pct(c.eaNeta)}, real ${pct(c.real)}`)},
 save(){
- if(!need(["ai","am","ae","ay"]))return err("o5","Revisa los campos marcados.");
- const P=val("ai"),M=val("am"),ea=val("ae"),y=val("ay"),inf=val("af")||0,N=Math.round(y*12),rm=Math.pow(1+ea/100,1/12)-1;
- const S=grow(P,M,rm,N),F=S[N],inv=P+M*N,real=F/Math.pow(1+inf/100,y);
- const Inv=S.map((_,k)=>P+M*k);
- let h=`<div class="res"><div class="bl">Valor final en ${y} años</div><div class="big">${money(F)}</div>`+kv("Total aportado",money(inv))+kv("Intereses ganados",money(F-inv))+kv("En pesos de hoy (sin inflación)",money(real))+`</div>`+
- chart([S,Inv],["#22c55e","#8a9bb8"],["Valor del ahorro","Lo que has aportado"]);
- let t=`Ahorro: ${money(F)} en ${y} años (aportado ${money(inv)}).`;
- const g=val("ag");
- if(g){let k=0;while(S[k]<g&&k<N)k++;
-  const nec=(g-P*Math.pow(1+rm,N))*rm/(Math.pow(1+rm,N)-1);
-  h+=`<div class="res" style="margin-top:10px"><b>🎯 Meta ${money(g)}</b>`+(S[N]>=g?kv("La alcanzas en",`${Math.floor(k/12)} años y ${k%12} meses`):kv("Con tu plan no llegas; te falta",money(g-F)))+kv("Aporte mensual necesario en "+y+" años",money(Math.max(nec,0)))+`</div>`;
-  t+=` Meta ${money(g)}: aporte necesario ${money(Math.max(nec,0))}/mes.`}
+ if(!need(["ai","am","ae","ay","af","as","afee"]))return err("o5","Completa los campos requeridos.");
+ const P=val("ai"),M=val("am"),ea=val("ae"),y=val("ay"),inf=val("af"),step=val("as"),fee=val("afee"),goal=val("ag"),begin=$("atiming").value==="begin",N=Math.round(y*12);
+ if(P<0||M<0||N<1||y>100||ea<=-98||ea>100||inf<=-100||inf>100||step<=-100||step>100||fee<0||fee>100||(goal!==null&&goal<0))return err("o5","Revisa los rangos: montos y meta no negativos; plazo de al menos un mes y hasta 100 años; rendimiento mayor a −98% y hasta 100%; inflación y aumento anual mayores a −100% y hasta 100%; costos entre 0 y 100%.");
+ const feeFactor=1-fee/100, grossFactor=1+ea/100, inflFactor=1+inf/100;
+ const simulate=(rateEA,monthly=M,trackGoal=goal!==null,initial=P)=>{
+  const rm=Math.pow(1+rateEA/100,1/12)*Math.pow(feeFactor,1/12)-1,bal=[initial],invested=[initial],contributions=[0];let v=initial,total=initial,goalMonth=(trackGoal&&initial>=goal)?0:null,monthlyNow=monthly;
+  for(let k=1;k<=N;k++){
+   if(k>1&&(k-1)%12===0)monthlyNow*=1+step/100;
+   if(begin){v+=monthlyNow;total+=monthlyNow;v*=1+rm}else{v*=1+rm;v+=monthlyNow;total+=monthlyNow}
+   if(!Number.isFinite(v)||v>1e300)return{error:true};
+   if(goalMonth===null&&trackGoal&&v>=goal)goalMonth=k;
+   bal.push(v);invested.push(total);contributions.push(monthlyNow)
+  }
+  return{bal,invested,contributions,rm,final:bal[N],total:invested[N],goalMonth}
+ };
+ const base=simulate(ea),low=simulate(ea-2,M,false),high=simulate(ea+2,M,false);
+ if(base.error||low.error||high.error)return err("o5","La proyección excede el rango numérico; reduce el plazo, el aporte o la tasa.");
+ const real=base.final/Math.pow(inflFactor,N/12),netEA=(grossFactor*feeFactor-1)*100,realEA=((1+netEA/100)/inflFactor-1)*100;
+ const profit=base.final-base.total,labels=Array.from({length:N+1},(_,k)=>k===0?"Hoy":k%12===0?`${k/12} a`:"");
+ let h=`<div class="res"><div class="bl">Saldo proyectado en ${num(N/12,1)} años</div><div class="big">${money(base.final)}</div>`+kv("Total aportado, incluido el capital inicial",money(base.total))+kv("Rendimiento neto estimado",money(profit))+kv("Saldo en pesos de hoy",money(real))+kv("Rendimiento EA después de costos",pct(netEA))+kv("Rendimiento real aprox. después de inflación",pct(realEA))+`</div>`+
+ `<div class="res savegroup"><h3>Escenarios ilustrativos (rendimiento bruto EA)</h3>`+kv(`Conservador (${pct(ea-2)})`,money(low.final))+kv(`Base (${pct(ea)})`,money(base.final))+kv(`Optimista (${pct(ea+2)})`,money(high.final))+`</div>`+
+ chart([low.bal,base.bal,high.bal,base.invested],["#60a5fa","#22c55e","#f59e0b","#8a9bb8"],["Conservador · −2 pp","Escenario base","Optimista · +2 pp","Total aportado"],{xlabels:labels});
+ let t=`Ahorro proyectado: ${money(base.final)} en ${num(N/12,1)} años; aportado ${money(base.total)}, saldo real ${money(real)}, EA neta estimada ${pct(netEA)}.`;
+ if(goal!==null){
+  const unit=simulate(ea,1,false,0),zero=simulate(ea,0,false),perUnit=unit.final,needed=goal<=zero.final?0:perUnit>0?(goal-zero.final)/perUnit:null;
+  h+=`<div class="saveflag"><b>🎯 Meta ${money(goal)}</b><br>`;
+  if(base.goalMonth!==null){const mm=base.goalMonth;h+=`La alcanzarías aproximadamente en ${Math.floor(mm/12)} años y ${mm%12} meses.`;t+=` Meta: alcanzada aproximadamente en ${Math.floor(mm/12)} años y ${mm%12} meses.`}
+  else{h+=`No se alcanza dentro del plazo; faltan ${money(Math.max(0,goal-base.final))} al final.`;t+=` Meta: no se alcanza en el plazo.`}
+  if(needed===null||!Number.isFinite(needed))h+=`<br>No es posible calcular el aporte requerido con esos supuestos: la proyección no crece lo suficiente.`;
+  else h+=`<br>Aporte mensual inicial estimado para llegar en ${num(N/12,1)} años: <b>${money(needed)}</b>${step?` (con aumento anual del ${pct(step)}).`:'.'}`;
+  h+='</div>';if(needed!==null&&Number.isFinite(needed))t+=` Aporte inicial estimado para la meta: ${money(needed)}/mes.`
+ }
  show("o5",h,t)},
 npv(){
  const c=$("vf").value.split(",").map(s=>parseFloat(s));
@@ -415,7 +439,7 @@ const st=localStorage.getItem("fc_tab");if(st)$("tabs").children[st].click();
 // acciones
 document.addEventListener("click",e=>{const t=e.target;
  if(t.dataset.go)A[t.dataset.go]();
- if(t.dataset.clr){document.querySelectorAll("#"+t.dataset.clr+" input[data-k]").forEach(i=>{if(i.id!="py")i.value=""});upd();$("o0").innerHTML=""}
+ if(t.dataset.clr){const section=$(t.dataset.clr);section.querySelectorAll("input[data-k],select[data-k],textarea[data-k]").forEach(i=>{if(t.dataset.clr==="p5"){if(i.tagName==="SELECT")i.selectedIndex=0;else i.value=i.defaultValue}else if(i.id!=="py")i.value=""});const output=section.querySelector(".out");if(output)output.innerHTML="";upd();const saved={};document.querySelectorAll("[data-k]").forEach(i=>saved[i.id]=i.value);localStorage.setItem("fc_v",JSON.stringify(saved))}
  if(t.dataset.copy){const x=$(t.dataset.copy).dataset.text;(navigator.clipboard?navigator.clipboard.writeText(x):Promise.reject()).then(()=>toast("Copiado ✅"),()=>toast("No se pudo copiar"))}});
 document.addEventListener("keydown",e=>{if(e.key=="Enter"&&e.target.tagName=="INPUT"){const b=e.target.closest(".p").querySelector("[data-go]");b&&b.click()}});
 $("csv").onclick=()=>{if(!lastLoan)return toast("Calcula primero");
